@@ -1,0 +1,67 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+using State = StateMachine<Player>.State;
+
+public partial class Player
+{
+    public class StatePlayerWalking : State
+    {
+        //移動速度
+        private float xSpeed = 0.0f;
+        protected override void OnEnter(State prevState)
+        {
+            Debug.Log("Walking");
+        }
+        protected override void OnUpdate()
+        {
+            //移動キーが離されたら立ち状態に遷移
+            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+            {
+                StateMachine.Dispatch((int)Event.Stand);
+                Debug.Log("go to Stand");
+            }
+            else if (Input.GetKey(KeyCode.Space))
+            {
+                //スペースキー押下でジャンプ状態に遷移
+                StateMachine.Dispatch((int)Event.Jump);
+            }
+            else if (!Owner.isGround)
+            {
+                //足場がなかったら落下状態に遷移
+                StateMachine.Dispatch((int)Event.Stand);
+            }
+
+            //移動処理
+            SetMoveSpeed();
+        }
+
+        protected override void OnExit(State nextState)
+        {
+            Owner.transform.localScale = Owner.DEFAULT_SCALE;
+        }
+
+        //移動速度の設定
+        private void SetMoveSpeed()
+        {
+            if (Input.GetKey(KeyCode.A))
+            {
+                xSpeed = -Owner.walkPower;
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                xSpeed = Owner.walkPower;
+            }
+            else
+            {
+                xSpeed = 0.0f;
+            }
+
+            //重力
+            Owner.speed = new Vector2(xSpeed, Owner.rigidBody.velocity.y);
+        }
+    }
+
+}
+
