@@ -26,6 +26,7 @@ public partial class Player
 
             //重力
             Owner.speed = new Vector2(xSpeed, ySpeed);
+            Debug.Log(ySpeed);
         }
 
         //移動速度の決定
@@ -45,8 +46,9 @@ public partial class Player
                 xSpeed = 0.0f;
             }
 
-            //ジャンプ
+            //落下
             ySpeed = -Owner.gravity;
+            ySpeed = Mathf.Max(ySpeed, -Owner.maxFallSpeed);
         }
 
     }

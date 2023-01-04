@@ -18,16 +18,22 @@ public partial class Player : MonoBehaviour
     /// </summary>
     //クラスタグ
     public const string Tag = "Player";
-    //接地判定
+    //接地判定(足)
     public GroundCheck ground;
+    //接地判定(頭)
+    public GroundCheck head;
     //重力
-    public float gravity = 0.0f;
+    public float gravity = 10.0f;
     //移動速度
     public float walkPower = 3.0f;
     //ジャンプ力
-    public float jumpPower = 5.0f;
+    public float jumpPower = 7.0f;
     //ジャンプの最大の高さ
     public float maxJumpHeight = 4.0f;
+    //落下速度上限
+    public float maxFallSpeed = 20.0f;
+    //ジャンプの制限時間
+    public float jumpLimitTime;
 
     /// <summary>
     /// プライベート変数
@@ -38,8 +44,12 @@ public partial class Player : MonoBehaviour
     private Rigidbody2D rigidBody;
     //移動速度
     private Vector2 speed = Vector2.zero;
-    //接地判定用フラグ
+    //接地判定用フラグ(足)
     private bool isGround = false;
+    //接地判定用フラグ(頭)
+    private bool isHead = false;
+    //ジャンプしている時間
+    private float jumpTime = 0.0f;
 
     //状態を管理する機械
     private StateMachine<Player> stateMachine;
@@ -78,6 +88,7 @@ public partial class Player : MonoBehaviour
     {
         //接地判定の取得
         isGround = ground.IsGround();
+        isHead = head.IsGround();
 
         //移動
         rigidBody.velocity = new Vector2(speed.x, speed.y);
