@@ -50,12 +50,26 @@ public class StateMachine<TOwner>
         protected virtual void OnUpdate() { }
 
         /// <summary>
+        /// ステート更新
+        /// </summary>
+        internal void FixedUpdate()
+        {
+            OnFixedUpdate();
+        }
+
+        /// <summary>
+        /// 一定フレーム毎呼ばれる
+        /// </summary>
+        protected virtual void OnFixedUpdate() { }
+        
+        /// <summary>
         /// ステート終了
         /// </summary>
         internal void Exit(State nextState)
         {
             OnExit(nextState);
         }
+
         /// <summary>
         /// ステートを終了した時に呼ばれる
         /// </summary>
@@ -168,6 +182,14 @@ public class StateMachine<TOwner>
     public void Update()
     {
         CurrentState.Update();
+    }
+
+    /// <summary>
+    /// ステートを更新する
+    /// </summary>
+    public void FixedUpdate()
+    {
+        CurrentState.FixedUpdate();
     }
 
     /// <summary>

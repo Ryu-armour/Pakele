@@ -90,6 +90,9 @@ public partial class Player : MonoBehaviour
         isGround = ground.IsGround();
         isHead = head.IsGround();
 
+        //ó‘Ô‚ÌXV
+        stateMachine.FixedUpdate();
+
         //ˆÚ“®
         rigidBody.velocity = new Vector2(speed.x, speed.y);
     }
