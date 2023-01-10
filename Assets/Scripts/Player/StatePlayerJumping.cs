@@ -34,14 +34,28 @@ public partial class Player
             //スペースキーを離したか
             bool isDetach = Input.GetKeyUp(KeyCode.Space);
 
-            //落下状態に遷移
-            if (Owner.isHead || isLimit || isReach || isDetach)
+            if (Input.GetKey(KeyCode.F))
             {
+                if (Owner.canInverse)
+                {
+                    //Fキー押下で反転可能な状態なら反転状態に遷移
+                    stateMachine.Dispatch((int)Event.Inverse);
+                }
+            }
+            else if (Owner.isHead || isLimit || isReach || isDetach)
+            {
+                //落下状態に遷移
                 stateMachine.Dispatch((int)Event.Dive);
             }
 
             //移動速度の決定
             SetMoveSpeed();
+        }
+
+        protected override void OnFixedUpdate()
+        {
+            //ジャンプ
+            ySpeed = Owner.jumpPower - Owner.gravity * Time.deltaTime;
 
             //移動
             Owner.speed = new Vector2(xSpeed, ySpeed);
@@ -71,10 +85,6 @@ public partial class Player
             {
                 xSpeed = 0.0f;
             }
-
-            //ジャンプ
-            //ySpeed = Owner.jumpPower;
-            ySpeed = Owner.jumpPower - Owner.gravity * Time.deltaTime;
         }
     }
 }

@@ -20,13 +20,12 @@ public partial class Player
                 //接地したら立ち状態に遷移
                 StateMachine.Dispatch((int)Event.Stand);
             }
+        }
 
+        protected override void OnFixedUpdate()
+        {
             //移動
             SetMoveSpeed();
-
-            //重力
-            Owner.speed = new Vector2(xSpeed, ySpeed);
-            Debug.Log(ySpeed);
         }
 
         //移動速度の決定
@@ -49,6 +48,9 @@ public partial class Player
             //落下
             ySpeed = -Owner.gravity;
             ySpeed = Mathf.Max(ySpeed, -Owner.maxFallSpeed);
+
+            //重力
+            Owner.speed = new Vector2(xSpeed, ySpeed);
         }
 
     }

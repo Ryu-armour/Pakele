@@ -22,19 +22,35 @@ public partial class Player
                 StateMachine.Dispatch((int)Event.Stand);
                 Debug.Log("go to Stand");
             }
+            else if (Input.GetKey(KeyCode.F))
+            {
+                if (Owner.canInverse)
+                {
+                    //Fキー押下で反転可能な状態なら反転状態に遷移
+                    stateMachine.Dispatch((int)Event.Inverse);
+                }
+            }
             else if (Input.GetKey(KeyCode.Space))
             {
                 //スペースキー押下でジャンプ状態に遷移
                 StateMachine.Dispatch((int)Event.Jump);
             }
-            else if (!Owner.isGround)
+
+            //移動処理
+            SetMoveSpeed();
+        }
+
+        protected override void OnFixedUpdate()
+        {
+
+            if (!Owner.isGround)
             {
                 //足場がなかったら落下状態に遷移
                 StateMachine.Dispatch((int)Event.Stand);
             }
 
-            //移動処理
-            SetMoveSpeed();
+            //移動
+            Owner.speed = new Vector2(xSpeed, Owner.rigidBody.velocity.y);
         }
 
         protected override void OnExit(State nextState)
@@ -57,9 +73,6 @@ public partial class Player
             {
                 xSpeed = 0.0f;
             }
-
-            //重力
-            Owner.speed = new Vector2(xSpeed, Owner.rigidBody.velocity.y);
         }
     }
 

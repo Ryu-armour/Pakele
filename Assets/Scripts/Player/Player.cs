@@ -50,6 +50,8 @@ public partial class Player : MonoBehaviour
     private bool isHead = false;
     //ジャンプしている時間
     private float jumpTime = 0.0f;
+    //反転が使用可能になるフラグ
+    private bool canInverse = false;
 
     //状態を管理する機械
     private StateMachine<Player> stateMachine;
@@ -58,6 +60,7 @@ public partial class Player : MonoBehaviour
     {
         Stand,  //立ち止まる
         Walk,   //歩く
+        Inverse,//反転
         Jump,   //ジャンプ
         Dive,   //落下
         Dead,   //死亡
@@ -94,29 +97,39 @@ public partial class Player : MonoBehaviour
         stateMachine.FixedUpdate();
 
         //移動
-        rigidBody.velocity = new Vector2(speed.x, speed.y);
+        rigidBody.velocity = new Vector2(speed.x * this.transform.localScale.x, speed.y * this.transform.localScale.y);
     }
 
     private void RegistStateTransitionMethod()
     {
         //立ち止まった状態から歩く
         stateMachine.AddTransition<StatePlayerStanding, StatePlayerWalking>((int)Event.Walk);
+        //立ち止まった状態から反転
+        stateMachine.AddTransition<StatePlayerStanding, StatePlayerInversion>((int)Event.Inverse);
         //立ち止まった状態からジャンプ
         stateMachine.AddTransition<StatePlayerStanding, StatePlayerJumping>((int)Event.Jump);
         //立ち止まった状態から落下
         stateMachine.AddTransition<StatePlayerStanding, StatePlayerDiving>((int)Event.Dive);
         //歩いた状態から立ち止まる
         stateMachine.AddTransition<StatePlayerWalking, StatePlayerStanding>((int)Event.Stand);
+        //歩いた状態から反転
+        stateMachine.AddTransition<StatePlayerWalking, StatePlayerInversion>((int)Event.Inverse);
         //歩いた状態からジャンプ
         stateMachine.AddTransition<StatePlayerWalking, StatePlayerJumping>((int)Event.Jump);
         //歩いた状態から落下
         stateMachine.AddTransition<StatePlayerWalking, StatePlayerDiving>((int)Event.Dive);
+        //反転した状態から落下
+        stateMachine.AddTransition<StatePlayerInversion, StatePlayerDiving>((int)Event.Dive);
         //ジャンプの状態から立ち止まる(着地)
         stateMachine.AddTransition<StatePlayerJumping, StatePlayerStanding>((int)Event.Stand);
+        //ジャンプの状態から反転
+        stateMachine.AddTransition<StatePlayerJumping, StatePlayerInversion>((int)Event.Inverse);
         //ジャンプの状態から落下
         stateMachine.AddTransition<StatePlayerJumping, StatePlayerDiving>((int)Event.Dive);
         //落下した状態から立ち止まる
         stateMachine.AddTransition<StatePlayerDiving, StatePlayerStanding>((int)Event.Stand);
+        //落下した状態から反転
+        stateMachine.AddTransition<StatePlayerDiving, StatePlayerInversion>((int)Event.Inverse);
 
         //プレイヤーが死んだら終了
         stateMachine.AddAnyTransition<StatePlayerDead>((int)Event.Dead);
