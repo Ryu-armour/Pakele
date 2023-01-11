@@ -13,6 +13,9 @@ public partial class Player
             //反転可能にする
             Owner.canInverse = true;
 
+            //移動ベクトルの初期化
+            Owner.rigidBody.velocity = Vector2.zero;
+
             Debug.Log("Standing");
         }
 

@@ -11,7 +11,7 @@ public partial class Player
     public class StatePlayerJumping : State
     {
         //移動速度
-        private float xSpeed,ySpeed = 0.0f;
+        private float xSpeed, ySpeed = 0.0f;
         //ジャンプの高さ
         private float jumpPos = 0.0f;
 
@@ -33,8 +33,8 @@ public partial class Player
             bool isReach = Owner.transform.position.y >= jumpPos + Owner.maxJumpHeight;
             //ジャンプが最低位置より低くないか
             bool isInsufficient = Owner.transform.position.y >= jumpPos + Owner.minJumpHeight;
-            //スペースキーを離したか
-            bool isDetach = Input.GetKeyUp(KeyCode.Space);
+            //スペースキーを押していないか
+            bool isDetach = !Input.GetKey(KeyCode.Space);
 
             if (Input.GetKey(KeyCode.F))
             {
@@ -44,13 +44,10 @@ public partial class Player
                     stateMachine.Dispatch((int)Event.Inverse);
                 }
             }
-            else if (Owner.isHead || isLimit || isReach || isDetach)
+            else if (Owner.isHead || isLimit || isReach || (isInsufficient && isDetach))
             {
-                if (isInsufficient)
-                {
-                    //落下状態に遷移
-                    stateMachine.Dispatch((int)Event.Dive);
-                }
+                //落下状態に遷移
+                stateMachine.Dispatch((int)Event.Dive);
             }
 
             //移動速度の決定
