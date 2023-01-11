@@ -23,17 +23,19 @@ public partial class Player : MonoBehaviour
     //接地判定(頭)
     public GroundCheck head;
     //重力
-    public float gravity = 10.0f;
+    public float gravity = 10f;
     //移動速度
-    public float walkPower = 3.0f;
+    public float walkPower = 3f;
     //ジャンプ力
-    public float jumpPower = 7.0f;
+    public float jumpPower = 7f;
     //ジャンプの最大の高さ
-    public float maxJumpHeight = 4.0f;
+    public float maxJumpHeight = 4f;
+    //ジャンプの最低の低さ
+    public float minJumpHeight = 1f;
     //落下速度上限
-    public float maxFallSpeed = 20.0f;
+    public float maxFallSpeed = 20f;
     //ジャンプの制限時間
-    public float jumpLimitTime;
+    public float jumpLimitTime = 1f;
 
     /// <summary>
     /// プライベート変数
@@ -49,9 +51,11 @@ public partial class Player : MonoBehaviour
     //接地判定用フラグ(頭)
     private bool isHead = false;
     //ジャンプしている時間
-    private float jumpTime = 0.0f;
+    private float jumpTime = 0f;
     //反転が使用可能になるフラグ
     private bool canInverse = false;
+    //描画の反転フラグ
+    private bool drawFlip = false;
 
     //状態を管理する機械
     private StateMachine<Player> stateMachine;
@@ -77,7 +81,6 @@ public partial class Player : MonoBehaviour
 
         //開始は立ち止まった状態から
         stateMachine.Start<StatePlayerStanding>();
-
     }
 
     private void Update()
@@ -133,5 +136,11 @@ public partial class Player : MonoBehaviour
 
         //プレイヤーが死んだら終了
         stateMachine.AddAnyTransition<StatePlayerDead>((int)Event.Dead);
+    }
+
+    //描画を反転する
+    private void ReverseDraw()
+    {
+        GetComponent<SpriteRenderer>().flipY = drawFlip;
     }
 }

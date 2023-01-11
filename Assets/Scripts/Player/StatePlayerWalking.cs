@@ -20,7 +20,6 @@ public partial class Player
             if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
             {
                 StateMachine.Dispatch((int)Event.Stand);
-                Debug.Log("go to Stand");
             }
             else if (Input.GetKey(KeyCode.F))
             {
@@ -46,7 +45,7 @@ public partial class Player
             if (!Owner.isGround)
             {
                 //‘«ê‚ª‚È‚©‚Á‚½‚ç—‰ºó‘Ô‚É‘JˆÚ
-                StateMachine.Dispatch((int)Event.Stand);
+                StateMachine.Dispatch((int)Event.Dive);
             }
 
             //ˆÚ“®

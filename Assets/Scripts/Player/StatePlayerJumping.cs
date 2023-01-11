@@ -31,6 +31,8 @@ public partial class Player
             bool isLimit = Owner.jumpTime >= Owner.jumpLimitTime;
             //ジャンプが最高到達点に達したか
             bool isReach = Owner.transform.position.y >= jumpPos + Owner.maxJumpHeight;
+            //ジャンプが最低位置より低くないか
+            bool isInsufficient = Owner.transform.position.y >= jumpPos + Owner.minJumpHeight;
             //スペースキーを離したか
             bool isDetach = Input.GetKeyUp(KeyCode.Space);
 
@@ -44,21 +46,32 @@ public partial class Player
             }
             else if (Owner.isHead || isLimit || isReach || isDetach)
             {
-                //落下状態に遷移
-                stateMachine.Dispatch((int)Event.Dive);
+                if (isInsufficient)
+                {
+                    //落下状態に遷移
+                    stateMachine.Dispatch((int)Event.Dive);
+                }
             }
 
             //移動速度の決定
             SetMoveSpeed();
+
+            //ジャンプ時間のカウント
+            Owner.jumpTime += Time.deltaTime;
         }
 
         protected override void OnFixedUpdate()
         {
+            Vector2 moveDirection = Vector2.zero;
+
+            moveDirection = CalcJumping(ref moveDirection);
             //ジャンプ
+            //ySpeed = moveDirection.y * Time.deltaTime / Time.deltaTime;
             ySpeed = Owner.jumpPower - Owner.gravity * Time.deltaTime;
 
             //移動
             Owner.speed = new Vector2(xSpeed, ySpeed);
+
         }
 
         //地面に着地した時の調整
@@ -68,6 +81,16 @@ public partial class Player
             pos.y = Owner.transform.localScale.y * 0.5f;
             Owner.transform.position = pos;
         }
+
+        //ジャンプ速度の演算処理
+        private Vector2 CalcJumping(ref Vector2 moveDirection)
+        {
+            moveDirection.y = Owner.jumpPower - Owner.gravity * Time.deltaTime;
+            moveDirection.y = Mathf.Max(moveDirection.y, -Owner.maxFallSpeed);
+
+            return moveDirection;
+        }
+
 
         //移動速度の決定
         private void SetMoveSpeed()

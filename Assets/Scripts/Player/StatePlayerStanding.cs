@@ -43,14 +43,15 @@ public partial class Player
             if (!Owner.isGround)
             {
                 //‘«ê‚ª‚È‚©‚Á‚½‚ç—‰ºó‘Ô‚É‘JˆÚ
-                StateMachine.Dispatch((int)Event.Stand);
+                StateMachine.Dispatch((int)Event.Dive);
             }
 
             //—‰º
             float gravity = -Owner.gravity;
-            gravity = Mathf.Max(gravity, -Owner.maxFallSpeed);
+            //gravity = Mathf.Max(gravity, -Owner.maxFallSpeed);
             //d—Í
-            Owner.speed = new Vector2(Owner.rigidBody.velocity.x, gravity);
+            //Owner.speed = new Vector2(Owner.rigidBody.velocity.x, gravity);
+            Owner.speed = new Vector2(Owner.rigidBody.velocity.x, gravity * Owner.rigidBody.velocity.y);
         }
     }
 }
