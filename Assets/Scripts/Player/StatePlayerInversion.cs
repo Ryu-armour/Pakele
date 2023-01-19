@@ -12,23 +12,29 @@ public partial class Player
             Owner.canInverse = false;
 
             //反転処理
-            //Owner.transform.localScale = new Vector3(Owner.transform.localScale.x, -Owner.transform.localScale.y, Owner.transform.localScale.z);
+            Owner.transform.localScale = new Vector3(Owner.transform.localScale.x, -Owner.transform.localScale.y, Owner.transform.localScale.z);
 
             //重力反転
-            Physics2D.gravity = new Vector2(Physics2D.gravity.x, -Physics2D.gravity.y);
+            //Physics2D.gravity = new Vector2(Physics2D.gravity.x, -Physics2D.gravity.y);
 
             //描画反転
-            Owner.drawFlip = !Owner.drawFlip;
-            Owner.ReverseDraw();
+            //Owner.drawFlip = !Owner.drawFlip;
+            //Owner.ReverseDraw();
 
-            Debug.Log(Physics2D.gravity);
+            //Debug.Log(Physics2D.gravity);
             Debug.Log("Inverse");
         }
 
         protected override void OnUpdate()
         {
-            //落下状態に遷移
-            stateMachine.Dispatch((int)Event.Dive);
+            //Debug.Log($"isHead:{Owner.isHead}");
+            //Debug.Log($"isGround:{Owner.isGround}");
+
+            if (!Owner.isGround)
+            {
+                //落下状態に遷移
+                stateMachine.Dispatch((int)Event.Dive);
+            }
         }
     }
 }

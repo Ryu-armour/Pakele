@@ -21,7 +21,7 @@ public partial class Player
             {
                 StateMachine.Dispatch((int)Event.Stand);
             }
-            else if (Input.GetKey(KeyCode.F))
+            else if (Input.GetKeyDown(KeyCode.F))
             {
                 if (Owner.canInverse)
                 {
@@ -54,7 +54,6 @@ public partial class Player
 
         protected override void OnExit(State nextState)
         {
-            Owner.transform.localScale = Owner.DEFAULT_SCALE;
         }
 
         //ˆÚ“®‘¬“x‚Ìİ’è

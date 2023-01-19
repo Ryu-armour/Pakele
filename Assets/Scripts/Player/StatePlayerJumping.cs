@@ -13,14 +13,14 @@ public partial class Player
         //移動速度
         private float xSpeed, ySpeed = 0.0f;
         //ジャンプの高さ
-        private float jumpPos = 0.0f;
+        private float jumpPosY = 0.0f;
 
         protected override void OnEnter(State prevState)
         {
-            Debug.Log("Jumping");
+            Debug.Log("Jumping----------------------------------------------------------------------------------");
 
             //ジャンプ開始位置の記録
-            jumpPos = Owner.transform.position.y;
+            jumpPosY = Owner.transform.position.y;
 
             //ジャンプ時間の初期化
             Owner.jumpTime = 0.0f;
@@ -29,14 +29,14 @@ public partial class Player
         {
             //ジャンプの制限時間が過ぎたか
             bool isLimit = Owner.jumpTime >= Owner.jumpLimitTime;
-            //ジャンプが最高到達点に達したか
-            bool isReach = Owner.transform.position.y >= jumpPos + Owner.maxJumpHeight;
+            //ジャンプが最高到達点に達したか絶対値で算出
+            bool isReach = Mathf.Abs(Owner.transform.position.y - jumpPosY) >=  Owner.maxJumpHeight;
             //ジャンプが最低位置より低くないか
-            bool isInsufficient = Owner.transform.position.y >= jumpPos + Owner.minJumpHeight;
+            bool isInsufficient = Mathf.Abs(Owner.transform.position.y - jumpPosY) >= Owner.minJumpHeight;
             //スペースキーを押していないか
             bool isDetach = !Input.GetKey(KeyCode.Space);
 
-            if (Input.GetKey(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 if (Owner.canInverse)
                 {

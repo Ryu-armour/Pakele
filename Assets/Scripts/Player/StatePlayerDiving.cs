@@ -11,7 +11,8 @@ public partial class Player
 
         protected override void OnEnter(State prevState)
         {
-            Debug.Log("Diving");
+            Debug.Log("Diving-------------------------------------------------------------------------");
+            Debug.Log(Owner.transform.localScale);
         }
         protected override void OnUpdate()
         {
@@ -47,7 +48,7 @@ public partial class Player
 
             //óéâ∫
             ySpeed = -Owner.gravity;
-            ySpeed = Mathf.Max(ySpeed, -Owner.maxFallSpeed);
+            //ySpeed = Mathf.Max(ySpeed, -Owner.maxFallSpeed);
 
             //èdóÕ
             Owner.speed = new Vector2(xSpeed, ySpeed);

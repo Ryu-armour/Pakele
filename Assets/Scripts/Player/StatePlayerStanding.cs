@@ -16,17 +16,21 @@ public partial class Player
             //移動ベクトルの初期化
             Owner.rigidBody.velocity = Vector2.zero;
 
-            Debug.Log("Standing");
+            Debug.Log("Standing--------------------------------------------------------------------------------");
+            //Debug.Log(Owner.transform.position);
         }
 
         protected override void OnUpdate()
         {
+            //Debug.Log($"isHead:{Owner.isHead}");
+            //Debug.Log($"isGround:{Owner.isGround}");
+
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
             {
                 //A・Dキー押下で歩く状態に遷移
                 StateMachine.Dispatch((int)Event.Walk);
             }
-            else if (Input.GetKey(KeyCode.F))
+            else if (Input.GetKeyDown(KeyCode.F))
             {
                 if (Owner.canInverse)
                 {
@@ -46,15 +50,13 @@ public partial class Player
             if (!Owner.isGround)
             {
                 //足場がなかったら落下状態に遷移
-                StateMachine.Dispatch((int)Event.Dive);
+                //StateMachine.Dispatch((int)Event.Dive);
             }
 
             //落下
             float gravity = -Owner.gravity;
-            //gravity = Mathf.Max(gravity, -Owner.maxFallSpeed);
             //重力
-            //Owner.speed = new Vector2(Owner.rigidBody.velocity.x, gravity);
-            Owner.speed = new Vector2(Owner.rigidBody.velocity.x, gravity * Owner.rigidBody.velocity.y);
+            Owner.speed = new Vector2(0f, gravity);
         }
     }
 }
